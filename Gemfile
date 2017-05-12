@@ -56,3 +56,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise', git: 'https://github.com/gogovan/devise.git', branch: 'rails-5.1'
+gem 'bulma-rails'
+gem 'foreman'
+gem 'paperclip'
+gem 'jquery-rails'
+gem 'jquery-datatables-rails', '~> 3.4.0'
