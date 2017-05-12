@@ -1,0 +1,2 @@
+web: bundle exec rails s
+hot-reloading: ./bin/webpack-dev-server
