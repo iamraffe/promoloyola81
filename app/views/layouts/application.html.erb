@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Promo Loyola 81</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_pack_tag    'hello_react', media: 'all' %>
+    <%= stylesheet_pack_tag    'application', media: 'all' %>
   </head>
-
   <body>
+    <%= render '_layout_elements/header' %>
     <%= yield %>
+    <footer class="footer" style="">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Made with</strong> <span class="fa fa-heart" style="vertical-align: 0px"></span> <strong>for</strong> <img src="<%= asset_path('colegio_escudo_red.png') %>" alt="San Ignacio Shield">
+          </p>
+        </div>
+      </div>
+    </footer>
   </body>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'hello_react' %>
+  <%= javascript_pack_tag 'application' %>
 </html>

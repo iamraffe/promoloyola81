@@ -1,0 +1,10 @@
+.nav-item{
+  &.is-brand{
+    padding-left: 0.75rem !important;
+  }
+
+  img{
+    height: 3.5rem;
+    max-height: none;
+  }
+}

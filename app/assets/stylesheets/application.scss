@@ -1,3 +1,31 @@
-@import 'bulma';
+/*
 
+LIB
+
+*/
+@import 'bulma';
+@import 'font-awesome';
+@import 'bulma.datatables';
+
+/*
+
+LAYOUT
+
+*/
+@import '_layout/_layout';
+
+/*
+
+CUSTOM
+
+*/
 @import 'devise';
+@import 'pages';
+
+.server-side.notification{
+  margin-bottom: 0px !important;
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+  border-radius: 1px;
+}
