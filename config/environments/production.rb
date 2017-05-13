@@ -87,14 +87,23 @@ Rails.application.configure do
   end
 
   config.action_mailer.default_url_options = { :host => "www.promoloyola81.com" }
+  # config.action_mailer.smtp_settings = {
+  #   address:              'smtp.gmail.com',
+  #   port:                 587,
+  #   domain:               'gmail.com',
+  #   user_name:            ENV.fetch("GMAIL_SMTP_EMAIL"),
+  #   password:             ENV.fetch("GMAIL_SMTP_PASSWORD"),
+  #   authentication:       :plain,
+  #   enable_starttls_auto: true
+  # }
+
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 587,
-    domain:               'gmail.com',
-    user_name:            ENV.fetch("GMAIL_SMTP_EMAIL"),
-    password:             ENV.fetch("GMAIL_SMTP_PASSWORD"),
-    authentication:       :plain,
-    enable_starttls_auto: true
+    :authentication => :plain,
+    :address => "smtp.mailgun.org",
+    :port => 587,
+    :user_name => ENV.fetch('MAILGUN_USERNAME'),
+    :password => ENV.fetch('MAILGUN_PASSWORD')
   }
 
   # Do not dump schema after migrations.

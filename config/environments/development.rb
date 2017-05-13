@@ -46,14 +46,23 @@ Rails.application.configure do
   config.assets.quiet = true
 
   config.action_mailer.default_url_options = { :host => "localhost:3000" }
+  # config.action_mailer.smtp_settings = {
+  #   address:              'smtp.gmail.com',
+  #   port:                 587,
+  #   domain:               'gmail.com',
+  #   user_name:            ENV.fetch("GMAIL_SMTP_EMAIL"),
+  #   password:             ENV.fetch("GMAIL_SMTP_PASSWORD"),
+  #   authentication:       :plain,
+  #   enable_starttls_auto: true
+  # }
+
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 587,
-    domain:               'gmail.com',
-    user_name:            ENV.fetch("GMAIL_SMTP_EMAIL"),
-    password:             ENV.fetch("GMAIL_SMTP_PASSWORD"),
-    authentication:       :plain,
-    enable_starttls_auto: true
+    :authentication => :plain,
+    :address => "smtp.mailgun.org",
+    :port => 587,
+    :user_name => ENV['MAILGUN_USERNAME'],
+    :password => ENV['MAILGUN_PASSWORD']
   }
 
   # Raises error for missing translations
