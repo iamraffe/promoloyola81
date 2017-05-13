@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import moment from 'moment'
 import request from 'superagent'
 import _ from 'lodash'
+import $ from 'jquery'
 
 import {
   withGoogleMap,
