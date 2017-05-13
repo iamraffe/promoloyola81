@@ -36,7 +36,7 @@ const SimpleMapExampleGoogleMap = withScriptjs(withGoogleMap(props => (
             <InfoWindow onCloseClick={() => props.onHideUserInfo(marker)}>
               <div className="marker-info-dialog">
                 <img className="user-avatar" src={marker.avatar} alt={marker.full_name} style={{display: 'none'}}/>
-                <p className="user-name">{marker.full_name}</p>
+                <p className="user-name">{marker.full_name} ({marker.nickname})</p>
                 <p className="user-contact">{marker.email} / {marker.phone_number}</p>
                 <p className="user-work">{marker.career} / {marker.job_position}</p>
               </div>
