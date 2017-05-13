@@ -86,6 +86,7 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  config.action_mailer.default_url_options = { :host => "www.promoloyola81.com" }
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
     port:                 587,
