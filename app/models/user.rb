@@ -12,7 +12,7 @@ class User < ApplicationRecord
   }
 
   geocoded_by :full_street_address   # can also be an IP address
-  after_save :geocode, if: ->(obj){ !obj.geocoded? }
+  before_save :geocode
 
   def full_street_address
     "#{city}, #{country}"
