@@ -128,7 +128,7 @@ class Profile extends React.Component{
 
   componentDidUpdate(prevProps, prevState){
     if(prevState.view !== 'table' && this.state.view === 'table'){
-      $('#users-table').DataTable({responsive: true})
+      window.loadTable()
     }
   }
 
