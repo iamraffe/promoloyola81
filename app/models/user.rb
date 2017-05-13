@@ -11,6 +11,12 @@ class User < ApplicationRecord
    (query ? where(["LOWER(nickname) ILIKE ? OR LOWER(first_name) ILIKE ? OR LOWER(last_name) ILIKE ? OR LOWER(middle_name) ILIKE ? OR LOWER(other_last_name) ILIKE ? OR CONCAT(LOWER(first_name), ' ', LOWER(middle_name), ' ', LOWER(last_name), ' ', LOWER(other_last_name)) ILIKE ? OR CONCAT(LOWER(first_name), ' ', LOWER(last_name), ' ', LOWER(other_last_name)) ILIKE ?", '%'+ query + '%', '%'+ query + '%', '%'+ query + '%', '%'+ query + '%', '%'+ query + '%','%'+ query + '%','%'+ query + '%' ])  : {})
   }
 
+  geocoded_by :full_street_address   # can also be an IP address
+  after_save :geocode, if: ->(obj){ !obj.geocoded? }
+
+  def full_street_address
+    "#{city}, #{country}"
+  end
 
   def full_name
     full_name = ''

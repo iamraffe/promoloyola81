@@ -26,6 +26,7 @@
     "rails-erb-loader": "^5.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-google-maps": "next",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.17.0",
     "superagent": "^3.5.2",

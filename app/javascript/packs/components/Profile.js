@@ -4,6 +4,49 @@ import moment from 'moment'
 import request from 'superagent'
 import _ from 'lodash'
 
+import {
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+  InfoWindow,
+} from 'react-google-maps'
+
+import MarkerClusterer from "react-google-maps/lib/addons/MarkerClusterer"
+
+import withScriptjs from "react-google-maps/lib/async/withScriptjs"
+
+const SimpleMapExampleGoogleMap = withScriptjs(withGoogleMap(props => (
+  <GoogleMap
+    defaultZoom={3}
+    defaultCenter={{ lat: 22.10, lng: -2.8138478 }}
+  >
+    <MarkerClusterer
+      averageCenter
+      enableRetinaIcons
+      gridSize={60}
+    >
+      {props.markers.map((marker,i) => (
+        <Marker
+          position={{ lat: marker.latitude, lng: marker.longitude }}
+          key={i}
+          onClick={() => props.onShowUserInfo(marker)}
+        >
+          {marker.showInfo && (
+            <InfoWindow onCloseClick={() => props.onHideUserInfo(marker)}>
+              <div className="marker-info-dialog">
+                <img className="user-avatar" src={marker.avatar} alt={marker.full_name} style={{display: 'none'}}/>
+                <p className="user-name">{marker.full_name}</p>
+                <p className="user-contact">{marker.email} / {marker.phone_number}</p>
+                <p className="user-work">{marker.career} / {marker.job_position}</p>
+              </div>
+            </InfoWindow>
+          )}
+        </Marker>
+      ))}
+    </MarkerClusterer>
+  </GoogleMap>
+)))
+
 class Profile extends React.Component{
   constructor(props){
     super(props)
@@ -12,17 +55,31 @@ class Profile extends React.Component{
       user: props.user,
       view: 'search',
       users: [],
+      markers: []
     }
 
     this.findSomeone = this.findSomeone.bind(this)
+    this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.handleMarkerClose = this.handleMarkerClose.bind(this);
   }
 
   findSomeone(e){
     console.log(e.target.value)
     const search_term = e.target.value
     if(search_term === ''){
-      this.setState({
-        users: []
+      const req = request.get(`/users`)
+      req.query({ format: 'json' })
+      req.field('authenticity_token', $('meta[name="csrf-token"]').attr('content'))
+      req.end((err, res)=>{
+        console.log(err, res)
+        if(res.statusCode === 200){
+          this.setState({
+            users: res.body.users,
+            markers: res.body.users.map(user => {
+              return _.assign({}, user, {showInfo: false, latitude: user.latitude+(Math.random()*0.001), longitude: user.longitude+(Math.random()*0.001)})
+            })
+          })
+        }
       })
     }
     else{
@@ -33,7 +90,10 @@ class Profile extends React.Component{
         console.log(err, res)
         if(res.statusCode === 200){
           this.setState({
-            users: res.body.users
+            users: res.body.users,
+            markers: res.body.users.map(user => {
+              return _.assign({}, user, {showInfo: false, latitude: user.latitude+(Math.random()*0.001), longitude: user.longitude+(Math.random()*0.001)})
+            })
           })
         }
         else{
@@ -52,6 +112,9 @@ class Profile extends React.Component{
         if(res.statusCode === 200){
           this.setState({
             users: res.body.users,
+            markers: res.body.users.map(user => {
+              return _.assign({}, user, {showInfo: false, latitude: user.latitude+(Math.random()*0.001), longitude: user.longitude+(Math.random()*0.001)})
+            }),
             view
           })
         }
@@ -64,7 +127,7 @@ class Profile extends React.Component{
 
   componentDidUpdate(prevProps, prevState){
     if(prevState.view !== 'table' && this.state.view === 'table'){
-      $('#users-table').DataTable()
+      $('#users-table').DataTable({responsive: true})
     }
   }
 
@@ -76,25 +139,50 @@ class Profile extends React.Component{
       console.log(err, res)
       if(res.statusCode === 200){
         this.setState({
-          users: res.body.users
+          users: res.body.users,
+          markers: res.body.users.map(user => {
+            return _.assign({}, user, {showInfo: false, latitude: user.latitude+(Math.random()*0.001), longitude: user.longitude+(Math.random()*0.001)})
+          })
         })
       }
     })
   }
 
+  handleMarkerClick(targetMarker) {
+    this.setState({
+      markers: this.state.markers.map(marker => {
+        if (marker === targetMarker) {
+          return _.assign({}, marker, {showInfo: true})
+        }
+        return marker;
+      }),
+    });
+  }
+
+  handleMarkerClose(targetMarker) {
+    this.setState({
+      markers: this.state.markers.map(marker => {
+        if (marker === targetMarker) {
+          return _.assign({}, marker, {showInfo: false})
+        }
+        return marker;
+      }),
+    });
+  }
+
   render(){
-    const { user, view, users } = this.state
+    const { user, view, users, markers } = this.state
 
     return(
       <div>
         <div className="section profile-heading">
           <div className="columns">
-            <div className="column is-2">
+            <div className="column is-2" style={{display: 'none'}}>
               <div className="image is-128x128 avatar">
                 <img src={user.avatar} />
               </div>
             </div>
-            <div className="column is-7 name">
+            <div className="column is-9 name">
               <p>
                 <span className="title is-bold">
                   {user.full_name}
@@ -136,25 +224,39 @@ class Profile extends React.Component{
         {view === 'search' &&
           <div>
             <div className="box">
-              <nav className="level is-tablet">
-                <div className="level-left">
-                  <div className="level-item">
-                    <p className="subtitle is-5">
-                      <strong>{users.length}</strong> matches
-                    </p>
-                  </div>
-                  <div className="level-item">
-                    <p className="control has-addons">
-                      <input className="input" type="text" placeholder="Find someone" onChange={this.findSomeone} />
-                    </p>
-                  </div>
+              <nav className="level is-mobile">
+                <div className="level-item">
+                  <p className="subtitle is-5">
+                    <strong>{users.length}</strong> matches
+                  </p>
                 </div>
-                <div className="level-right">
-                  <p className="level-item"><strong>Name</strong></p>
-                  <p className="level-item"><a>City</a></p>
-                  <p className="level-item"><a>Country</a></p>
+                <div className="level-item">
+                  <p className="control has-addons">
+                    <input className="input" type="text" placeholder="Find someone" onChange={this.findSomeone} />
+                  </p>
                 </div>
               </nav>
+            </div>
+            <div className="columns is-multiline">
+              <div className="column">
+                <section className="panel">
+                  <div className="panel-block" style={{height: '90vh'}}>
+                    <SimpleMapExampleGoogleMap
+                      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2petpKAnye_yjIjH7tg3yOCnCqUWI9mw"
+                      loadingElement={<div>Loading...</div>}
+                      containerElement={
+                        <div style={{ height: `100%`, width: '100%' }} />
+                      }
+                      mapElement={
+                        <div style={{ height: `100%`, width: '100%' }} />
+                      }
+                      markers={markers}
+                      onShowUserInfo={this.handleMarkerClick}
+                      onHideUserInfo={this.handleMarkerClose}
+                    />
+                  </div>
+                </section>
+              </div>
             </div>
           </div>
         }

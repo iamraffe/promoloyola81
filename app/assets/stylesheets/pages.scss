@@ -7,6 +7,7 @@ body {
 .profile-heading {
   margin: 20px 0;
   padding-bottom: 30px;
+  min-height: 215px;
 }
 .profile-heading .name {
   @media(min-width: 1000px){
@@ -128,4 +129,35 @@ p.title.is-bold {
   border-radius: 3px;
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
   background-color: white;
+
+  @media(max-width: 787px){
+    .panel-block{
+      padding: 0;
+
+      .column{
+        padding: 0.25rem;
+      }
+      .dataTables_wrapper.dt-bulma{
+        margin: 5px;
+      }
+    }
+  }
+}
+
+.marker-info-dialog{
+  .user-avatar{
+    width: 35%;
+    display: block;
+    margin: 5px auto 5px;
+    border-radius: 100%;
+  }
+  .user-name{
+    font-weight: bold;
+  }
+  .user-contact{
+
+  }
+}
+.control.has-addons{
+  width: 100%;
 }

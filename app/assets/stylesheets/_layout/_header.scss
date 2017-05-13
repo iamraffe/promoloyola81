@@ -8,3 +8,14 @@
     max-height: none;
   }
 }
+
+.main-navbar{
+  @media(max-width: 768px){
+    .button.is-danger{
+      margin-top: 10%;
+    }
+    .nav-item{
+      justify-content: flex-end;
+    }
+  }
+}

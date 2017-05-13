@@ -8,6 +8,7 @@
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag    'application', media: 'all' %>
+    <%= stylesheet_link_tag    'https://cdn.datatables.net/responsive/2.1.1/css/responsive.dataTables.min.css', media: 'all' %>
   </head>
   <body>
     <%= render '_layout_elements/header' %>
@@ -23,5 +24,6 @@
     </footer>
   </body>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js' %>
   <%= javascript_pack_tag 'application' %>
 </html>
